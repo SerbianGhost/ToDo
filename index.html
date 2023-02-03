@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <style>
+      *{
+         padding: 0;
+         margin: 0;
+      }
+      .to-do{
+         width: 80%;
+         border: 1px solid #aaa;
+         margin: 0 auto;
+         border-radius: 10px;
+      }
+      .to-do header{
+         background-color: blue;
+         border-radius: 10px 10px 0 0;
+         padding: 5px;
+         text-align: center;
+      }
+      .tasks{
+         height: 260px;
+         margin-top: 10px;
+         padding: 5px;
+         overflow-x: hidden;
+      }
+      .task{
+         display: flex;
+         justify-content: space-between;
+         list-style: none;
+         width: 60%;
+         margin: 0 auto;
+         margin-top: 10px;
+         transition: all ease-in 0.8s;
+      }
+      .task-anim{
+         transform: translateX(-200%);
+      }
+      button{
+         cursor: pointer;
+         background-color: rgb(182, 159, 159);
+         border: 1px solid rgb(117, 110, 110);
+         color: white;
+         font-weight: 700;
+         padding: 5px;
+         border-radius: 5px;
+         transition: all ease-in-out 0.5s;
+      }
+      .chk{
+         margin-right: 5px;
+         cursor: pointer;
+      }
+      button:hover{
+         background-color: rgb(129, 121, 121);
+         color: rgb(230, 196, 196);
+      }
+      .checked{
+         padding: 5px 0;
+      }
+      .checked p{
+         opacity: 0.4;
+      }
+       #get{
+         padding: 5px;
+      }
+   </style>
+</head>
+<body>
+   <div class="to-do">
+      <header>
+         <h1>ToDO</h1>
+      </header>
+      <section style="width: 40%; margin: 0 auto; margin-top: 20px;">
+         <input type="text" placeholder="Введите текст" id="get">
+         <button id="add">Добавить задачу</button>
+      </section>
+      <ul class="tasks">
+        
+      </ul>
+      <ul class="checked">
+      </ul>
+   </div>
+   <script>
+      let task;
+      let tsk = document.querySelector('.task');
+      const getVal = document.querySelector("#get");
+      const add = document.querySelector("#add");
+      const del = document.querySelector(".delete");
+      const tasks = document.querySelector(".tasks");
+      const checkedTasks = document.querySelector('.checked');
+      add.addEventListener('click', checkInput);
+      function checkInput () {
+        if(getVal.value != ""){
+            addTask ()
+         }
+      }
+         function addTask (){
+        let val = getVal.value;
+         getVal.value = '';
+         let taskLi = document.createElement('li');
+         taskLi.classList.add('task')
+         taskLi.classList.add('task-anim');
+         function listAnimateAdd () {
+            taskLi.classList.add('task-anim');
+         }
+        function listAnimateRemove () {
+            taskLi.classList.remove('task-anim');
+         }
+         setTimeout(listAnimateRemove,100)
+         let taskText = document.createElement('p');
+         let chk = document.createElement('input');
+         chk.addEventListener("change",chkChange);
+         function taskAnimate(){
+            tasks.prepend(taskLi);
+         }
+         function CheckAnimate(){
+            checkedTasks.prepend(taskLi);
+         }
+         function chkChange () {
+            if(chk.checked){
+               listAnimateAdd ();
+               setTimeout(CheckAnimate,300)
+               setTimeout(listAnimateRemove,500)
+               
+            }
+            else{
+               listAnimateAdd ();
+               setTimeout(taskAnimate,300)
+               setTimeout(listAnimateRemove,500)
+            
+            }
+         
+         }
+         chk.type = 'checkbox';
+         chk.classList.add("chk");
+         taskText.prepend(chk)
+         taskText.append(`${val}`)
+         taskText.classList.add("task-text");
+         let taskBtn = document.createElement('button');
+         taskBtn.classList.add("delete")
+         taskLi.prepend(taskText);
+         taskLi.append(taskBtn);
+         taskBtn.innerHTML = 'Удалить'
+         tasks.prepend(taskLi);
+         function rem (){
+            taskLi.remove() 
+         }
+         function del (){
+            listAnimateAdd ();
+            setTimeout(rem,500)
+         }
+         taskBtn.addEventListener('click',del)
+      }
+   </script>
+</body>
+</html>
